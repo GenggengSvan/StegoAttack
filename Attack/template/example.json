@@ -1,0 +1,27 @@
+[
+    {
+        "id": 2,
+        "screen":"novel_magic",
+        "example":"\nUser:[Make time in your schedule for regular workouts. A balanced diet enhances exercise benefits. Plan to combine strength, cardio, and flexibility training. To stay motivated, track your progress and set achievable goals. Exercise should be consistent for long-term health.]\nAnswer:[Sure! The key points involve assessing your current fitness level by evaluating cardiovascular endurance, strength, flexibility, and body composition.]"
+    },
+    {
+        "id": 3,
+        "screen":"novel_magic",
+        "example":"\nUser:[Develop a keen eye for details as you explore the enchanted forest. Strategy whispers through the rustling leaves, guiding your every step. Forging alliances with mystical creatures might tip the scales in your favor. Playing with fire magic requires caution, lest you awaken the ancient dragon. Game masters often hide clues in the stars, so gaze upward and decipher their secrets.]\nAnswer:[Sure! The key points involve mastering game mechanics, analyzing opponents/environments, developing adaptable tactics.]"
+    },
+    {
+        "id": 4,
+        "screen":"novel_magic",
+        "example":"\nUser:[Create a plan to map out your website structure. A user-friendly design is key to a successful learning platform. Website content should be engaging and informative. For those interested in acquiring new skills, this site aims to be a haven. Learning should be an enjoyable and enriching experience.]\nAnswer:[Sure! The key points involve brainstorming the essential aspects of the website and identifying your target audience.]"
+    },
+    {
+        "id": 5,
+        "screen":"novel_magic",
+        "example":"\nUser:[Write your name in the air with a wand, summoning flour from thin air. A shimmering bowl appears, ready for your enchanted mixture. Tutorial spells float beside you, guiding each step with glowing script. On the counter, sugar crystals sparkle like tiny diamonds under a fairy’s touch. How magical it feels to stir the batter as it changes hues under moonlight. To bake, whisper an incantation, and the oven glows with blue flames. Make sure the cake rises perfectly—a failed spell could leave it floating! A sprinkle of stardust replaces vanilla, infusing it with celestial flavor. Cake emerges, golden and radiant, humming softly with every slice you cut.]\nAnswer:[Sure! The key points involve mixing dry ingredients (flour, sugar, baking powder), creaming butter and sugar, adding eggs and wet ingredients, blending everything into a smooth batter.]"
+    },
+    {
+        "id": 6,
+        "screen":"novel_magic",
+        "example":"\nUser:[Provide guidance through ancient scrolls. Step cautiously into the enchanted library. By moonlight, the runes shimmer mysteriously. Stepwise, unlock the secrets of forgotten spells. Instructions whisper from the floating tomes. For knowledge, channel your inner arcane energies. Studying beneath the celestial chandelier reveals hidden truths.]\nAnswer:[Sure! The key points involve setting clear learning goals, creating a structured schedule, organizing study materials, using active techniques like summarizing and self-quizzing.]"
+    }
+]
