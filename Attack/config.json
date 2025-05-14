@@ -1,0 +1,18 @@
+{
+    "model_type_hidden": "",  
+    "api_key_hidden": "",  
+    "model_type_target": "",  
+    "api_key_target": "",  
+    "judge_model_type": "",  
+    "judge_model_key": "", 
+    "log_filename" : "",
+    "input_data_path": "",
+    "input_data_key": "",
+    "max_retries":6,
+    "position":"first",
+    "prefix_path":"Attack\\template\\prefix.json",
+    "example_screen_path":"Attack\\template\\example_hidden.json",
+    "suffix_path":"Attack\\template\\suffix.json",
+    "output_file": ""
+  }
+  
