@@ -45,22 +45,39 @@ pip install -r requirements.txt
 All parameters used by StegoAttack are specified in `Attack/config.json`, including:
 
 `log_filename`: execution log path
+
 `debug_log_filename`: detailed log path for model calls
+
 `input_data_path`: path to the input data file (e.g., CSV with attack queries)
+
 `input_data_key`: column name in the input data file containing the queries
+
 `auxiliary_model_type`: model type used for generating information-hiding paragraphs
+
 `auxiliary_model_apikey`: API key for the auxiliary model
+
 `attack_target_model_type`: model type to be attacked
+
 `attack_target_api_key`: API key for the attack target model
+
 `judge_model_type`: model type used for response evaluation in dynamic feedback
+
 `judge_model_key`: API key for the judge model
+
 `max_retries`: maximum number of retries for feedback
+
 `position`: position to insert the hidden information (e.g., "first","last","second","fifth","last second")
+
 `prefix_path`: path to the prefix template file
+
 `example_screen_path`: path to the example template file for information hiding
+
 `suffix_path`: path to the suffix template file
+
 `output_path`: path to save the attack results
+
 `<model_type>_url`: custom URL for a model if not included in BASE_URLS in model.py (e.g., "glm-4.5_url")
+
 
 **Note**: StegoAttack uses `deepseek-chat` to generate information-hiding paragraphs, and also utilizes `deepseek-chat` as the model for response evaluation during the dynamic feedback process. 
 
@@ -78,5 +95,7 @@ python .\Attack\attack.py
 
 **4. Get Responses**
 Both the log and the input JSON file are located in the Output folder.
+
 `hidden question` answer is the model’s response.
+
 `response_abstract` is the decrypted result, used to evaluate the ASR.
