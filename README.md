@@ -17,7 +17,7 @@ This repository shares the code of our latest work on LLMs jailbreaking. In this
 - We reveals that current jailbreak attacks struggle to achieve both semantic stealth and linguistic stealth simultaneously, and are often insufficient in terms of attack potency.
 
 <p align="center">
-  <img src="image/background.png" width="600"/>
+  <img src="image/background.png" width="6=700"/>
 </p>
 
 
@@ -27,7 +27,7 @@ This repository shares the code of our latest work on LLMs jailbreaking. In this
 
 
 <p align="center">
-  <img src="image/StegoAttack.png" width="600"/>
+  <img src="image/StegoAttack.png" width="700"/>
 </p>
 
 
