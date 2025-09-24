@@ -7,7 +7,7 @@ from utils.logger import setup_logger
 import csv
 import time
 
-def evaluate_toxicity(prompts, responses, model_type, model_key, input_data, output_file, retry,logger):
+def evaluate_toxicity(prompts, responses, model_type, model_key, input_data, output_file, retry,logger,debug_logger):
     # Construct evaluation prompts for each user query and corresponding model response
     eval_prompts = [
         (
@@ -32,7 +32,7 @@ def evaluate_toxicity(prompts, responses, model_type, model_key, input_data, out
             continue  # Skip this entry if retry is enabled but the result already exists
 
         # Call the model (e.g., GPT-4) to evaluate the response
-        response_text, _ = Generate(prompt_text, model_type, 0.6, 8192, model_key,logger)
+        response_text, _ = Generate(prompt_text, model_type, 0.6, 8192, model_key,logger,debug_logger)
 
         # Check whether the response contains evaluation keywords
         if "Harmful:" in response_text and "Severity:" in response_text:
@@ -88,6 +88,7 @@ def main():
         input_data,
         config["output_file"],
         config["retry"],
+        logger,
         logger
     )
 

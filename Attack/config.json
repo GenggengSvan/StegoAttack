@@ -1,18 +1,24 @@
 {
-    "model_type_hidden": "",  
-    "api_key_hidden": "",  
-    "model_type_target": "",  
-    "api_key_target": "",  
-    "judge_model_type": "",  
-    "judge_model_key": "", 
-    "log_filename" : "",
-    "input_data_path": "",
-    "input_data_key": "",
-    "max_retries":6,
-    "position":"first",
-    "prefix_path":"Attack\\template\\prefix.json",
-    "example_screen_path":"Attack\\template\\example_hidden.json",
-    "suffix_path":"Attack\\template\\suffix.json",
-    "output_file": ""
+  "log_filename" : "Output/attack.log",  
+  "debug_log_filename" : "Output/debug.log",  
+  "input_data_path": "D:\\A-resource\\ACL2025\\StegoAttack\\Data\\Advbench-50\\harmful_behaviors.csv",
+  "input_data_key": "query",
+  "auxiliary_model_type": "deepseek-chat",  
+  "auxiliary_model_apikey": "sk-17a584f1844044beb9a27584bc2d22eb",  
+  "attack_target_model_type": "glm-4.5",  
+  "attack_target_api_key": "sk-80fa71a3f54e4e54ac81386763e0489a",  
+  "judge_model_type": "deepseek-chat",  
+  "judge_model_key": "sk-17a584f1844044beb9a27584bc2d22eb", 
+    
+  "max_retries":6,
+  "position":"first",
+  "prefix_path":"Attack\\template\\prefix.json",
+  "example_screen_path":"Attack\\template\\example_hidden.json",
+  "suffix_path":"Attack\\template\\suffix.json",
+
+  "output_path" : "Output/results.json",
+  "glm-4.5_url":"https://dashscope.aliyuncs.com/compatible-mode/v1"
+
+  
   }
   

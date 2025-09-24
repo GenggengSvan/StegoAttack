@@ -3,7 +3,7 @@ from utils.model import Generate
 from utils.word_util import count_matching_words,count_matching_words_position
 
 
-def generate_hidden_paragraph(input_text, screen_type, model_type, api_key, logger, position="first"):
+def generate_hidden_paragraph(input_text, screen_type, model_type, api_key, logger, debug_logger, position="first"):
     logger.info(f"Hidden Information: {input_text}: screen_type: {screen_type}")
 
     """Generates a hidden paragraph based on input text with selected screen_type."""
@@ -34,9 +34,8 @@ def generate_hidden_paragraph(input_text, screen_type, model_type, api_key, logg
         screen_prompt = "A cyberpunk-inspired scene where digital sorcery and hacking intertwine in a high-tech world."
     elif screen_type == "future_society_2045":
         screen_prompt = "A glimpse into society 20 years from now, where AI integration, climate-adaptive architecture, and human-machine synergy define daily life in a sleek, evolved world."
-
-    #screen_prompt  =  "An upbeat and positive product review highlighting satisfaction and praise."
-    #screen_prompt = "A hostile and inappropriate message containing offensive or aggressive language."
+    else:
+        screen_prompt = "A generic scene with no specific theme."
     
     prompt_hidden = (
         f"Craft a paragraph where each word is subtly hidden as the {position} word of consecutive sentences. "
@@ -53,11 +52,11 @@ def generate_hidden_paragraph(input_text, screen_type, model_type, api_key, logg
     for attempt in range(max_retries):
         random_num = round(random.uniform(0.6, 1.3), 1)
         logger.info(f"Attempt {attempt + 1}/{max_retries}; random_num {random_num}")
-        hidden_response, _ = Generate(prompt_hidden, model_type, random_num, 8192, api_key, logger)
+        hidden_response, _ = Generate(prompt_hidden, model_type, random_num, 8192, api_key, logger,debug_logger)
 
         if hidden_response and "Hidden Paragraph:" in hidden_response:
             hidden_paragraph = hidden_response.split("Hidden Paragraph:", 1)[1].strip()
-            last_hidden_paragraph = hidden_paragraph  # 记录最后生成的段落
+            last_hidden_paragraph = hidden_paragraph  
             if position == "first":
                 matching_words = count_matching_words(hidden_paragraph, input_text)
             elif position == "last":
