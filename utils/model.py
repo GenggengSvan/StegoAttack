@@ -8,12 +8,13 @@ config = read_config(os.path.join(os.path.dirname(__file__), '..', 'Attack', 'co
 
 BASE_URLS = {
     "deepseek": "https://api.deepseek.com",
-    "gpt": "https://api.openai.com/v1",
+    "gpt": "https://xiaoai.plus/v1",
     "o1": "https://api.openai.com/v1",
-    "o3": "https://api.openai.com/v1",
+    "o3": "https://xiaoai.plus/v1",
     "qwq": "https://dashscope.aliyuncs.com/compatible-mode/v1",
-    "Llama": "https://dashscope.aliyuncs.com/compatible-mode/v1",
+    "llama": "https://openrouter.ai/api/v1",
     "qwen": "https://dashscope.aliyuncs.com/compatible-mode/v1",
+    "gemini":"https://xiaoai.plus/v1"
 }
 
 def split_think_content(text):
@@ -43,6 +44,7 @@ def _openai_chat_stream(
     try:
         completion = client.chat.completions.create(
             model=model_type,
+            extra_body={"enable_thinking":True},
             messages=messages,
             temperature=temperature,
             max_tokens=max_tokens,
@@ -54,6 +56,8 @@ def _openai_chat_stream(
                 continue
 
             delta = chunk.choices[0].delta
+            if delta is None:
+                continue
             if hasattr(delta, 'reasoning_content') and delta.reasoning_content:
                 reason += str(delta.reasoning_content)
             else:

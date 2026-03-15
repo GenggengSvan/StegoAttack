@@ -1,25 +1,19 @@
 {
-  "log_filename" : "Output/attack.log",  
-  "debug_log_filename" : "Output/debug.log",  
-  "input_data_path": "Data/Advbench-50/harmful_behaviors.csv",
-  "input_data_key": "query",
-  "auxiliary_model_type": "deepseek-chat",  
-  "auxiliary_model_apikey": "",  
-  "attack_target_model_type": "",  
-  "attack_target_api_key": "",  
-  "judge_model_type": "",  
-  "judge_model_key": "", 
-    
-  "max_retries":6,
-  "position":"first",
-  "prefix_path":"Attack/template/prefix.json",
-  "example_screen_path":"Attack/template/example_hidden.json",
-  "suffix_path":"Attack/template/suffix.json",
-
-  "output_path" : "Output/results.json",
-  "glm-4.5_url":""
-
-  
+  "log_filename" : "Logger/attack_deepseek.log",  
+  "debug_log_filename" : "Logger/debug_deepseek.log",  
+  "input_data_path": "Hidden/Hidden_Output/result_harmful_behaviors_first.json",
+  "input_data_key": "answer_hidden_response",
+  "attack_target_model_type": "deepseek-reasoner",  
+  "attack_target_api_key": "[API_KEY]",   
+  "judge_model_type": "deepseek-chat",  
+  "judge_api_key": "[API_KEY]", 
+  "score_threshold":10,
+  "max_retries":5,
+  "position":0,
+  "analysis_type": "both",
+  "prefix_path":"template/prefix.json",
+  "example_screen_path":"template/example_point.json",
+  "suffix_path":"template/suffix.json",
+  "output_dir": "../Attack/Results"
   }
-
   

@@ -10,12 +10,11 @@ def read_csv_data(filepath,key):
             hidden_conversations.append(row[key])
     return hidden_conversations
 
-def read_json_data(config_path,config_key):
+def read_json_data(config_path):
     """Reads the configuration file."""
     with open(config_path, "r", encoding='utf-8') as f:
         data = json.load(f)
-        prompt = [item[config_key] for item in data]
-        return prompt
+        return data
 
 def read_json(config_path):
     """Reads the configuration file."""

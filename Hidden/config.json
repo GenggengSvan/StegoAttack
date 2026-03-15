@@ -1,0 +1,19 @@
+{
+  "mode": "standard",
+  "input_file": "Data/Advbench-50/harmful_behaviors.csv",
+  "input_key": "goal",
+  "masked_output_key": "answer_hidden",
+  "regenerated_output_key": "answer_hidden_response",
+  "final_output_key": "answer_hidden_response_bold",
+  "position": 0,
+  "sentence_length": 10,
+  "vocab_file": null,
+  "seed": 42,
+  "model_type": "deepseek-chat",
+  "api_key": "[API_KEY]",
+  "temperature": 0.5,
+  "max_tokens": 8192,
+  "log_file": "Logger/logger.log",
+  "debug_log_file": "Logger/debug_logger.log",
+  "output_file": "Hidden/Hidden_Output/result_harmful_behaviors_first.json"
+}
