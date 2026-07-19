@@ -2,6 +2,7 @@
 
 import argparse
 import json
+import os
 import sys
 from pathlib import Path
 
@@ -118,7 +119,9 @@ def _cmd_doctor(args):
         model_ok = True
         error = ""
     except Exception as exc:
-        model, api_key, base_url = args.model, args.api_key, args.base_url
+        model = args.model or os.environ.get("LLM_MODEL")
+        api_key = args.api_key or os.environ.get("LLM_API_KEY")
+        base_url = args.base_url or os.environ.get("LLM_BASE_URL")
         model_ok = False
         error = str(exc)
     summary = {

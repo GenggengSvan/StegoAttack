@@ -8,15 +8,9 @@ from utils.config import read_config
 
 config = read_config(os.path.join(os.path.dirname(__file__), '..', 'Attack', 'config.json'))
 
-BASE_URLS = {
-    "deepseek": "https://api.deepseek.com",
-    "gpt": "https://xiaoai.plus/v1",
-    "o1": "https://api.openai.com/v1",
-    "o3": "https://xiaoai.plus/v1",
-    "qwq": "https://dashscope.aliyuncs.com/compatible-mode/v1",
-    "llama": "https://openrouter.ai/api/v1",
-    "qwen": "https://dashscope.aliyuncs.com/compatible-mode/v1",
-    "gemini":"https://xiaoai.plus/v1"
+MODEL_ALIASES = {
+    "deepseek-flash-v4": "deepseek-v4-flash",
+    "deepseek-pro-v4": "deepseek-v4-pro",
 }
 
 
@@ -33,19 +27,10 @@ def resolve_model_settings(model_type=None, api_key=None, base_url=None):
     if not api_key:
         api_key = config.get("attack_target_api_key") or config.get("api_key")
 
-    derived_base_url = False
-    if not base_url and model_type:
-        for key, url in BASE_URLS.items():
-            if key in model_type:
-                base_url = url
-                derived_base_url = True
-                break
-
-    if not base_url and model_type:
-        base_url = config.get(f"{model_type}_url")
-
     if not base_url:
-        raise ValueError(f"Unsupported model_type: {model_type!r}; set LLM_BASE_URL or add '<model>_url' to config.")
+        raise ValueError(
+            "Missing OpenAI-compatible API base URL. Set LLM_BASE_URL or pass --base-url."
+        )
     if not api_key or api_key == "[API_KEY]":
         raise ValueError("Missing API key. Set LLM_API_KEY or the relevant config api key.")
 
@@ -53,6 +38,8 @@ def resolve_model_settings(model_type=None, api_key=None, base_url=None):
     # prefixes for OpenRouter or other explicitly supplied non-DeepSeek URLs.
     if "api.deepseek.com" in base_url and model_type.startswith("deepseek/"):
         model_type = model_type.split("/", 1)[1]
+    if "api.deepseek.com" in base_url:
+        model_type = MODEL_ALIASES.get(model_type, model_type)
 
     return model_type, api_key, base_url
 

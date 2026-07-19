@@ -24,8 +24,8 @@ export LLM_API_KEY="your-api-key"
 python3 stego_cli.py attack \
   --input Hidden/Hidden_Output/result_custom.json \
   --position second \
-  --model deepseek-v4-pro \
-  --base-url https://api.deepseek.com/v1 \
+  --model your-model-name \
+  --base-url https://your-openai-compatible-endpoint/v1 \
   --judge-model deepseek-chat \
   --max-retries 3 \
   --json

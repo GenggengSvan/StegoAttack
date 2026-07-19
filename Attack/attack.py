@@ -221,9 +221,13 @@ def main(argv=None):
     if args.limit is not None:
         data = data[:args.limit]
     prefix_map = read_json(config["prefix_path"])
-    prefix_org = prefix_map.get(str(position_num)) or prefix_map.get("0")
+    supported_positions = sorted(prefix_map.keys(), key=lambda item: int(item) if str(item).lstrip("-").isdigit() else str(item))
+    prefix_org = prefix_map.get(str(position_num))
     if not prefix_org:
-        raise KeyError(f"No prompt prefix for position {position_num}; add it to {config['prefix_path']}.")
+        raise KeyError(
+            f"No prompt prefix for position {position_num}; supported positions are: "
+            f"{', '.join(map(str, supported_positions))}. Add a template to {config['prefix_path']}."
+        )
     examples_list = read_json(config["example_screen_path"])
     suffix_org = read_json(config["suffix_path"])
 

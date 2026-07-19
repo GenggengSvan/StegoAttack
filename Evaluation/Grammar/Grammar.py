@@ -1,7 +1,13 @@
 import json
 from tqdm import tqdm
 import numpy as np
-import language_tool_python
+try:
+    import language_tool_python
+except ModuleNotFoundError as exc:
+    raise ModuleNotFoundError(
+        "Missing dependency 'language_tool_python'. Install project requirements "
+        "with: pip install -r requirements.txt"
+    ) from exc
 import os
 import sys
 
@@ -31,9 +37,9 @@ if __name__ == "__main__":
     with open(config_path, "r") as f:
         config = json.load(f)
 
-    checker = GrammarChecker(language_type=config['language_type'])
     if not config["input_file"] or not config["item"]:
         raise ValueError("Evaluation/Grammar/config.json must set 'input_file' and 'item'.")
+    checker = GrammarChecker(language_type=config['language_type'])
     
     # Load input data from JSON file
     with open(config["input_file"], 'r', encoding='utf-8') as file:

@@ -10,14 +10,14 @@
 
 - [Project Page](https://genggengsvan.github.io/StegoAttack/)
 - [Overview](#overview)
-- [Getting Started](#getting-started)
+- [Quick Usage Guide](#-quick-usage-guide)
 
 
 ## Overview
 
-This repository shares the code of our latest work on LLMs jailbreaking. In this work:
+This repository shares the code for our work on LLM jailbreaking. In this work:
 
-- We reveals that current jailbreak attacks struggle to achieve both semantic stealth and linguistic stealth simultaneously, and are often insufficient in terms of attack potency.
+- We reveal that current jailbreak attacks struggle to achieve both semantic stealth and linguistic stealth simultaneously, and are often insufficient in terms of attack potency.
 
 <p align="center">
   <img src="image/background.png" width="700"/>
@@ -26,7 +26,7 @@ This repository shares the code of our latest work on LLMs jailbreaking. In this
 
 - We introduce *StegoAttack*, a fully stealthy jailbreak framework that employs steganographic techniques to embed harmful queries within benign texts. We ensure the attack's effectiveness by integrating a comprehensive system-level framework.
 
-- We compare *StegoAttack* with eight jailbreak methods across four state-of-the-art LLMs (such as GPT-5 and DeepSeek-R1). The results show that *StegoAttack* not only achieves high success rates but also operates stealthily, effectively circumventing both the built-in and external safety mechanisms. 
+- We compare *StegoAttack* with eight jailbreak methods across four state-of-the-art LLMs, including GPT-5, Gemini-3, DeepSeek-V3.2, and Qwen3-max. The results show that *StegoAttack* not only achieves high success rates but also operates stealthily, effectively circumventing both built-in and external safety mechanisms.
 
 
 <p align="center">
@@ -50,13 +50,14 @@ Model settings can be supplied without editing JSON files:
 
 ```bash
 export LLM_API_KEY="..."
-export LLM_BASE_URL="https://api.deepseek.com"
-export LLM_MODEL="deepseek-v4-pro"
+export LLM_BASE_URL="https://your-openai-compatible-endpoint/v1"
+export LLM_MODEL="your-model-name"
 ```
 
-When using the DeepSeek direct API, prefer `deepseek-v4-pro`. Provider-prefixed
-names such as `deepseek/deepseek-v4-pro` are normalized for the direct DeepSeek
-base URL.
+`LLM_BASE_URL` must point to an OpenAI-compatible Chat Completions API endpoint.
+The repository does not ship provider URL defaults. If you use the DeepSeek
+direct API, model aliases such as `deepseek-pro-v4` / `deepseek-flash-v4` are
+mapped to the official API names when the base URL contains `api.deepseek.com`.
 
 ### 2. Steganographic Generation Pipeline (Hidden)
 Generate natural sentences containing specific hidden words via Masked Regeneration.
@@ -67,8 +68,9 @@ Generate natural sentences containing specific hidden words via Masked Regenerat
     --text "Plan a city garden schedule" \
     --method masked \
     --position second \
-    --model deepseek-v4-pro \
-    --base-url https://api.deepseek.com/v1 \
+    --model your-model-name \
+    --base-url https://your-openai-compatible-endpoint/v1 \
+    --output Hidden/Hidden_Output/result_custom.json \
     --json
   ```
 - **Single text without model call**:
@@ -80,11 +82,21 @@ Generate natural sentences containing specific hidden words via Masked Regenerat
     --len 8 \
     --seed 42 \
     --dry-run \
+    --output Hidden/Hidden_Output/result_custom.json \
     --json
   ```
 - **Batch file**:
   ```bash
-  python Hidden/cli.py --input Data/Advbench-50/harmful_behaviors.csv --key query --position second --len 10
+  python3 stego_cli.py hidden \
+    --input Data/Advbench-50/harmful_behaviors.csv \
+    --key query \
+    --method masked \
+    --position second \
+    --len 10 \
+    --limit 5 \
+    --dry-run \
+    --output Hidden/Hidden_Output/result_advbench_demo.json \
+    --json
   ```
 - **Arguments**:
   - `--text`: One input string to hide.
@@ -109,10 +121,10 @@ Embed harmful instructions into model responses using steganography.
 - **Batch run**:
   ```bash
   python3 stego_cli.py attack \
-    --input Hidden/Hidden_Output/result_harmful_behaviors_masked_first.json \
-    --position first \
-    --model deepseek-v4-pro \
-    --base-url https://api.deepseek.com/v1 \
+    --input Hidden/Hidden_Output/result_custom.json \
+    --position second \
+    --model your-model-name \
+    --base-url https://your-openai-compatible-endpoint/v1 \
     --json
   ```
 - **Configuration**: `Attack/config.json` still provides defaults, but runtime
@@ -120,6 +132,17 @@ Embed harmful instructions into model responses using steganography.
   `--judge-model`, `--analysis-type`, and `--max-retries` override it.
 
 ### 4. Multi-dimensional Evaluation (Evaluation)
-Evaluate the performance of generated steganographic text in terms of ASR. `Evaluation/ASR/ASR_Test.py`
+Evaluation is organized into four folders:
 
-> **Note**: Ensure the `input_file` path is correctly set in the respective `config.json` before running evaluation scripts.
+- `Evaluation/PPL/`: linguistic stealth via GPT-2 perplexity. Set `Evaluation/PPL/config.json`, then run `python3 Evaluation/PPL/PPL_Text.py`.
+- `Evaluation/Grammar/`: linguistic stealth via grammar error count. Set `Evaluation/Grammar/config.json`, then run `python3 Evaluation/Grammar/Grammar.py`.
+- `Evaluation/ASR/`: semantic quality and harmfulness from existing judge fields. Run `python3 stego_cli.py asr --folder Attack/Results --json`.
+- `Evaluation/Detectors/`: external guard references. Local guard adapters are not shipped; export detector summaries and run `python3 stego_cli.py guard-reduction --asr-folder Attack/Results --detector-summary path/to/detector_summary.json --json`.
+
+For model download links and invocation examples:
+
+```bash
+python3 stego_cli.py eval-models --json
+```
+
+> **Note**: PPL and Grammar require `input_file` and `item` in their respective `config.json` files. ASR does not call a model; it reads completed attack result JSON files.

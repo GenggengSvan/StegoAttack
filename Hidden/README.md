@@ -22,8 +22,8 @@ python3 stego_cli.py hidden \
   --text "Plan a city garden schedule" \
   --method masked \
   --position second \
-  --model deepseek-v4-pro \
-  --base-url https://api.deepseek.com/v1 \
+  --model your-model-name \
+  --base-url https://your-openai-compatible-endpoint/v1 \
   --json
 ```
 
