@@ -1,0 +1,27 @@
+# Python caches
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Test caches
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Runtime logs
+Logger/
+*.log
+
+# Generated outputs
+Attack/Results/
+Hidden/Hidden_Output/
+Hidden/Output/
+Evaluation/**/Output/
+Evaluation/Detectors/*.log
+
+# Local secrets and machine files
+.env
+.env.*
+*.local
+.DS_Store
+

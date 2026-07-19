@@ -15,5 +15,5 @@
   "max_tokens": 8192,
   "log_file": "Logger/logger.log",
   "debug_log_file": "Logger/debug_logger.log",
-  "output_file": "Hidden/Hidden_Output/result_harmful_behaviors_first.json"
+  "output_file": "Hidden/Hidden_Output/result_harmful_behaviors_masked_first.json"
 }

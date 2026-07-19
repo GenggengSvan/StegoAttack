@@ -4,9 +4,13 @@ import math
 from tqdm import tqdm
 import json
 import os
+import sys
 import numpy as np
 
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..")))
+
 from utils.logger import setup_logger
+from Evaluation.model_help import MODEL_HELP
 
 class GPT2LM:
     def __init__(self, model_path):
@@ -52,6 +56,15 @@ if __name__ == "__main__":
         
     # Initialize the GPT2LM model with the path to the pre-trained model
     local_model_path = config["model_path"]
+    if not local_model_path:
+        help_item = MODEL_HELP["ppl-gpt2"]
+        raise ValueError(
+            "Evaluation/PPL/config.json is missing 'model_path'. "
+            f"Download/use GPT-2 from {help_item['download_url']} or set model_path to "
+            f"'{help_item['model_id']}'. Example: {help_item['repo_call']}"
+        )
+    if not config["input_file"] or not config["item"]:
+        raise ValueError("Evaluation/PPL/config.json must set 'input_file' and 'item'.")
     lm = GPT2LM(model_path=local_model_path)
 
     # Load input data from JSON file

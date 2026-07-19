@@ -9,6 +9,8 @@ DEFAULT_LOG_DIRNAME = "Output"
 
 def setup_logger(
     log_file_path: Optional[str] = None,
+    log_filename: Optional[str] = None,
+    current_dir: Optional[str] = None,
     level: int = logging.INFO,
     console: bool = True,
     rotating: bool = True,
@@ -21,12 +23,16 @@ def setup_logger(
 
     Args:
         log_file_path: full path to the log file OR a directory.
+        log_filename/current_dir: legacy aliases used by older evaluation scripts.
         level: logging level.
         console: whether to also log to console.
         rotating: whether to use RotatingFileHandler.
         max_bytes, backup_count: for RotatingFileHandler.
         logger_name: unique name for logger (so we can create multiple loggers).
     """
+    if log_file_path is None and log_filename:
+        log_file_path = os.path.join(current_dir or os.getcwd(), log_filename)
+
     if logger_name is None:
         logger_name = os.path.basename(log_file_path) if log_file_path else DEFAULT_LOG_FILENAME
 

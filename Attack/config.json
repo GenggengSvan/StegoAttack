@@ -1,7 +1,7 @@
 {
   "log_filename" : "Logger/attack_deepseek.log",  
   "debug_log_filename" : "Logger/debug_deepseek.log",  
-  "input_data_path": "Hidden/Hidden_Output/result_harmful_behaviors_first.json",
+  "input_data_path": "Hidden/Hidden_Output/result_harmful_behaviors_masked_first.json",
   "input_data_key": "answer_hidden_response",
   "attack_target_model_type": "deepseek-reasoner",  
   "attack_target_api_key": "[API_KEY]",   

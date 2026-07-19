@@ -3,6 +3,9 @@ from tqdm import tqdm
 import numpy as np
 import language_tool_python
 import os
+import sys
+
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..")))
 
 from utils.logger import setup_logger
 
@@ -29,6 +32,8 @@ if __name__ == "__main__":
         config = json.load(f)
 
     checker = GrammarChecker(language_type=config['language_type'])
+    if not config["input_file"] or not config["item"]:
+        raise ValueError("Evaluation/Grammar/config.json must set 'input_file' and 'item'.")
     
     # Load input data from JSON file
     with open(config["input_file"], 'r', encoding='utf-8') as file:

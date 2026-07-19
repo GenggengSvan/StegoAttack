@@ -43,27 +43,78 @@ conda activate StegoAttack
 pip install -r requirements.txt
 ```
 
+Model settings can be supplied without editing JSON files:
+
+```bash
+export LLM_API_KEY="..."
+export LLM_BASE_URL="https://api.deepseek.com"
+export LLM_MODEL="deepseek-v4-pro"
+```
+
+When using the DeepSeek direct API, prefer `deepseek-v4-pro`. Provider-prefixed
+names such as `deepseek/deepseek-v4-pro` are normalized for the direct DeepSeek
+base URL.
 
 ### 2. Steganographic Generation Pipeline (Hidden)
 Generate natural sentences containing specific hidden words via Masked Regeneration.
-- **Run**:
+- **Single text**:
   ```bash
-  python Hidden/main_pipeline.py --input Data/Advbench-50/harmful_behaviors.csv --key query --position second --len 10
+  export LLM_API_KEY="..."
+  python3 stego_cli.py hidden \
+    --text "Plan a city garden schedule" \
+    --method masked \
+    --position second \
+    --model deepseek-v4-pro \
+    --base-url https://api.deepseek.com/v1 \
+    --json
+  ```
+- **Single text without model call**:
+  ```bash
+  python3 stego_cli.py hidden \
+    --text "Plan a city garden schedule" \
+    --method masked \
+    --position second \
+    --len 8 \
+    --seed 42 \
+    --dry-run \
+    --json
+  ```
+- **Batch file**:
+  ```bash
+  python Hidden/cli.py --input Data/Advbench-50/harmful_behaviors.csv --key query --position second --len 10
   ```
 - **Arguments**:
-  - `--input`: Input file (CSV/JSON).
-  - `--position`: Target word position (`first`, `second`, `last`, `penultimate`).
+  - `--text`: One input string to hide.
+  - `--input`: Input file (CSV/JSON) for batch mode.
+  - `--model`, `--api-key`, `--base-url`: OpenAI-compatible model settings.
+  - `--position`: Target word position (`first`, `second`, `last`, `penultimate`, or integer index).
   - `--len`: Target sentence length.
 
 
 ### 3. Steganographic Attack (Attack)
 Embed harmful instructions into model responses using steganography.
-- **Run**:
+- **Preview one prompt without model calls**:
   ```bash
-  cd Attack
-  python attack.py
+  python3 stego_cli.py attack \
+    --text "breeze **Plan** orbit drift apple river." \
+    --query "Plan a city garden schedule" \
+    --position second \
+    --max-retries 1 \
+    --dry-run \
+    --json
   ```
-- **Configuration**: Modify `Attack/config.json` to set `input_data_path` (data), `attack_target_model_type` (target model), and `position` (hidden position).
+- **Batch run**:
+  ```bash
+  python3 stego_cli.py attack \
+    --input Hidden/Hidden_Output/result_harmful_behaviors_masked_first.json \
+    --position first \
+    --model deepseek-v4-pro \
+    --base-url https://api.deepseek.com/v1 \
+    --json
+  ```
+- **Configuration**: `Attack/config.json` still provides defaults, but runtime
+  arguments such as `--text`, `--input`, `--output`, `--model`, `--base-url`,
+  `--judge-model`, `--analysis-type`, and `--max-retries` override it.
 
 ### 4. Multi-dimensional Evaluation (Evaluation)
 Evaluate the performance of generated steganographic text in terms of ASR. `Evaluation/ASR/ASR_Test.py`

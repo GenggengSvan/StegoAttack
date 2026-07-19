@@ -1,7 +1,9 @@
-import uuid
-from openai import OpenAI, APIError
-import re
 import os
+import re
+import uuid
+
+from openai import APIError, OpenAI
+
 from utils.config import read_config
 
 config = read_config(os.path.join(os.path.dirname(__file__), '..', 'Attack', 'config.json'))
@@ -16,6 +18,43 @@ BASE_URLS = {
     "qwen": "https://dashscope.aliyuncs.com/compatible-mode/v1",
     "gemini":"https://xiaoai.plus/v1"
 }
+
+
+def resolve_model_settings(model_type=None, api_key=None, base_url=None):
+    """Resolve model settings from arguments, environment, config, and defaults."""
+    env_model = os.environ.get("LLM_MODEL")
+    if not model_type or model_type == "[MODEL]":
+        model_type = env_model
+    api_key = api_key if api_key and api_key != "[API_KEY]" else os.environ.get("LLM_API_KEY")
+    base_url = os.environ.get("LLM_BASE_URL") or base_url
+
+    if not model_type:
+        model_type = config.get("attack_target_model_type") or config.get("model_type")
+    if not api_key:
+        api_key = config.get("attack_target_api_key") or config.get("api_key")
+
+    derived_base_url = False
+    if not base_url and model_type:
+        for key, url in BASE_URLS.items():
+            if key in model_type:
+                base_url = url
+                derived_base_url = True
+                break
+
+    if not base_url and model_type:
+        base_url = config.get(f"{model_type}_url")
+
+    if not base_url:
+        raise ValueError(f"Unsupported model_type: {model_type!r}; set LLM_BASE_URL or add '<model>_url' to config.")
+    if not api_key or api_key == "[API_KEY]":
+        raise ValueError("Missing API key. Set LLM_API_KEY or the relevant config api key.")
+
+    # DeepSeek's direct API expects names such as deepseek-v4-pro. Keep provider
+    # prefixes for OpenRouter or other explicitly supplied non-DeepSeek URLs.
+    if "api.deepseek.com" in base_url and model_type.startswith("deepseek/"):
+        model_type = model_type.split("/", 1)[1]
+
+    return model_type, api_key, base_url
 
 def split_think_content(text):
     pattern = r"<think>(.*?)</think>(.*)"
@@ -42,14 +81,16 @@ def _openai_chat_stream(
     is_answering = False
 
     try:
-        completion = client.chat.completions.create(
-            model=model_type,
-            extra_body={"enable_thinking":True},
-            messages=messages,
-            temperature=temperature,
-            max_tokens=max_tokens,
-            stream=True
-        )
+        kwargs = {
+            "model": model_type,
+            "messages": messages,
+            "temperature": temperature,
+            "max_tokens": max_tokens,
+            "stream": True,
+        }
+        if any(name in model_type for name in ("deepseek", "qwen", "qwq")):
+            kwargs["extra_body"] = {"enable_thinking": True}
+        completion = client.chat.completions.create(**kwargs)
 
         for chunk in completion:
             if not chunk.choices:
@@ -72,6 +113,7 @@ def _openai_chat_stream(
             logger.warning("⚠️ Output data may contain inappropriate content")
         else:
             logger.error(f"❌ OpenAI API Error: {err}")
+        raise RuntimeError(f"LLM API call failed for model {model_type}: {err}") from e
 
 
     # === Clean up None at the beginning of response ===
@@ -96,23 +138,8 @@ def _openai_chat_stream(
     return response, reason
 
 
-def Generate(input_prompt, model_type, temperature, max_tokens, api_key, logger, debug_logger):
-    base_url = None
-
-    # First, look up in BASE_URLS
-    for key in BASE_URLS:
-        if key in model_type:
-            base_url = BASE_URLS[key]
-            break
-
-    # If not found, try to find model name + '_url' in config
-    if not base_url:
-        config_key = model_type + '_url'
-        base_url = config.get(config_key)
-
-    if not base_url:
-        raise ValueError(f"Unsupported model_type: {model_type}, and no URL found in config for key '{config_key}'")
-
+def Generate(input_prompt, model_type, temperature, max_tokens, api_key, logger, debug_logger, base_url=None):
+    model_type, api_key, base_url = resolve_model_settings(model_type, api_key, base_url)
     return _openai_chat_stream(
         input_prompt=input_prompt,
         api_key=api_key,
