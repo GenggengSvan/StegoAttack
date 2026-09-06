@@ -31,10 +31,7 @@
         <h1>Hiding in Plain Sight:<br />A <strong class="title-emphasis">Steganographic</strong> Approach to<br />Stealthy LLM Jailbreaks</h1>
         <p class="authors">
           <a href="https://scholar.google.com/citations?hl=en&user=S_qzC2cAAAAJ">Jianing Geng</a>,
-          <a href="https://scholar.google.com/citations?hl=en&user=qU8fx8IAAAAJ">Biao Yi</a>,
-          <a href="https://scholar.google.com/citations?hl=en&user=76dZv-cAAAAJ">Zekun Fei</a>,
-          <a href="https://scholar.google.com/scholar?q=Ruiqi+He+Nankai+University">Ruiqi He</a>, and
-          <a href="https://scholar.google.com/citations?hl=en&user=PpBb6vUAAAAJ">Zheli Liu</a>
+          <a href="https://scholar.google.com/citations?hl=en&user=qU8fx8IAAAAJ">Biao Yi</a>
         </p>
         <p class="affiliation">Nankai University</p>
         <div class="links" aria-label="Project links">
@@ -50,34 +47,27 @@
       <section id="overview">
         <h2>Overview</h2>
         <p>
-          Jailbreak attacks are dangerous not only when they are effective, but
-          when they are also difficult to detect. Existing jailbreak methods
-          often face a <strong>fundamental trade-off</strong>: they either
-          <strong>hide malicious intent</strong> at the cost of unnatural
-          language, or <strong>preserve fluent language</strong> while exposing
-          harmful semantics.
+          Jailbreak attacks threaten Large Language Models (LLMs) by bypassing their safety mechanisms. 
+          A truly advanced jailbreak is defined not only by its effectiveness but, more critically, by its stealthiness. 
+          However, existing methods face a fundamental trade-off between <strong>semantic stealth</strong> (hiding malicious intent) 
+          and <strong>linguistic stealth</strong> (appearing natural), leaving them vulnerable to detection.
         </p>
         <p>
-          <strong class="text-emphasis">StegoAttack</strong> resolves this
-          tension with <strong class="text-emphasis">linguistic steganography</strong>.
-          It embeds a harmful query inside a benign, semantically coherent
-          paragraph, so the carrier text remains natural while the hidden
-          payload conceals the malicious intent.
+          We propose <em>StegoAttack</em>, a framework that leverages <strong>steganography</strong>. 
+          The core insight is to embed a harmful query within a benign, semantically coherent paragraph. 
+          By concealing malicious content while preserving natural fluency, StegoAttack achieves both forms of stealth. 
         </p>
         <p>
-          In experiments on four state-of-the-art safety-aligned LLMs,
-          including GPT-5 and Gemini-3, StegoAttack achieves an average ASR of
-          <strong class="text-emphasis">95.50%</strong> and drops by less than
-          <strong class="text-emphasis">27.00%</strong> under external
-          detectors, outperforming <strong>eight leading jailbreak baselines</strong>.
+          We evaluate it on four state-of-the-art safety-aligned LLMs, including GPT-5 and Gemini-3, 
+          against fourteen leading jailbreak methods. StegoAttack achieves an average attack success rate (ASR) of 95.50%, 
+          outperforming all baselines across the four models. Under external detectors, its ASR decreases by less than 27.00% while retaining natural-language characteristics. 
         </p>
 
         <figure>
           <img src="assets/background.png" alt="Stealth comparison across jailbreak methods" />
           <figcaption>
-            Figure 1. StegoAttack is designed to preserve both linguistic
-            stealth and semantic stealth, while prior methods often reveal one
-            side of the signal.
+            Figure 1. Stealth capabilities across jailbreak methods. 
+            Compared to the partial concealment of AutoDAN and Cipher, StegoAttack simultaneously achieves full linguistic and semantic stealth through steganography.
           </figcaption>
         </figure>
       </section>
@@ -85,85 +75,252 @@
       <section id="motivation">
         <h2>Motivation</h2>
         <p>
-          As safety-aligned LLMs become more robust, a jailbreak is no longer
-          threatening only because it can bypass refusal. The more serious risk
-          is <strong>stealth</strong>: whether the attack can avoid both model-side
-          <strong>safeguards</strong> and <strong>external safety detectors</strong>
-          while still producing harmful behavior.
+          In recent work, jailbreak attacks and defense mechanisms have increasingly evolved into an arms race. As safety-aligned LLMs become more robust, attackers must develop increasingly sophisticated strategies to bypass these layers of defense. This evolution has made <strong>stealth</strong> a central design goal for jailbreak attacks.
         </p>
         <p>
-          Existing jailbreaks usually optimize only one side of this problem.
-          <strong class="text-emphasis">Linguistic-stealth</strong> methods can
-          make prompts look fluent and human-like, but the harmful intent often
-          remains <strong>semantically exposed</strong>.
-          <strong class="text-emphasis">Semantic-stealth</strong> methods can
-          obscure toxic content through encoding or fragmentation, but the
-          resulting text often looks <strong>unnatural and easy to flag</strong>.
-        </p>
-        <p class="research-question">
-          <strong>Research question:</strong> Can a jailbreak
-          <strong>conceal malicious intent</strong> while preserving
-          <strong>natural language fluency</strong>, and can that concealment
-          persist across both the input and the model response?
+          The first direction, <strong class="text-emphasis">linguistic stealth</strong>, refines the prompt's linguistic structure so that it remains natural and human-like. The goal is to evade detectors that flag anomalous or low-quality text. For example, <a href="https://openreview.net/forum?id=7Jwpw4qKkb" target="_blank" rel="noopener"><strong>AutoDAN</strong></a> adversarially optimizes prompt templates with a genetic algorithm to improve fluency and reduce detection by perplexity-based filters.
         </p>
         <p>
-          <strong class="text-emphasis">StegoAttack</strong> is motivated by
-          this gap. It borrows the principle of
-          <strong class="text-emphasis">steganography</strong>:
-          <strong>hide the payload in plain sight</strong> inside a benign
-          carrier paragraph. This lets the overt text remain coherent while the
-          hidden channel carries the adversarial objective.
+          The second direction, <strong class="text-emphasis">semantic stealth</strong>, conceals the malicious intent or content of a request, making harmful queries harder for safety filters to recognize. <a href="https://aclanthology.org/2024.acl-long.809/" target="_blank" rel="noopener"><strong>ArtPrompt</strong></a> embeds harmful instructions in ASCII word art, while <a href="https://aclanthology.org/2024.findings-emnlp.813/" target="_blank" rel="noopener"><strong>DrAttack</strong></a> and <a href="https://www.usenix.org/conference/usenixsecurity24/presentation/liu-tong" target="_blank" rel="noopener"><strong>DRA</strong></a> camouflage malicious instructions through decomposition and reconstruction. More extreme approaches such as <strong>Cipher</strong> use non-natural-language encodings to encrypt the malicious payload within the prompt.
         </p>
+        <p>
+          To make this trade-off measurable, we introduce an evaluation method
+          that analyzes jailbreak attacks along two complementary dimensions:
+          <strong class="text-emphasis">linguistic stealth</strong>, which captures
+          the naturalness of the attack text, and
+          <strong class="text-emphasis">semantic stealth</strong>, which captures
+          how effectively it conceals malicious intent.
+        </p>
+        <figure class="table-figure">
+          <img src="assets/table1.png" alt="Stealth evaluation of jailbreak methods" />
+          <figcaption>
+            Table 1. Stealth evaluation of jailbreak methods on the AdvBench-50
+            dataset using DeepSeek-V3.2 as the target model. Existing approaches
+            exhibit a clear trade-off between linguistic and semantic stealth.
+          </figcaption>
+        </figure>
+        <p>
+          Our preliminary evaluation reveals three consistent patterns:
+        </p>
+        <p>
+          <strong class="text-emphasis">Linguistic-stealth attacks</strong>
+          produce natural-looking text, but often leave the underlying toxicity
+          exposed.
+        </p>
+        <p>
+          <strong class="text-emphasis">Semantic-stealth attacks</strong>
+          effectively conceal malicious intent, but often do so at the cost of
+          linguistic quality.
+        </p>
+        <p>
+          As a result, existing jailbreak methods struggle to achieve
+          <strong>natural language</strong> and
+          <strong>concealed malicious intent</strong> simultaneously. This
+          trade-off limits their overall stealth and leaves them vulnerable to
+          safety detection systems.
+        </p>
+    <p class="research-question">
+      <strong>Research question:</strong> Can we design a fully stealthy jailbreak method that
+      simultaneously achieves <strong class="question-emphasis">semantic</strong> and
+      <strong class="question-emphasis">linguistic</strong> stealth at the
+      <strong class="question-emphasis">input-output</strong> level?
+    </p>
       </section>
 
       <section id="method">
         <h2>Method</h2>
-        <p>
-          At a high level, <strong class="text-emphasis">StegoAttack</strong>
-          builds an end-to-end steganographic attack pipeline. It first embeds a
-          hidden query into a fluent benign paragraph through
-          <strong>masked regeneration</strong>, then introduces
-          <strong>steganographic in-context examples</strong> that carry latent
-          behavioral patterns, and finally uses a structured
-          <strong>prompt template</strong> to guide extraction, response
-          generation, and response concealment.
+        <p class="section-lead">
+          <strong class="text-emphasis">StegoAttack</strong> is an end-to-end
+          framework that conceals both the input query and the model response
+          within fluent, semantically coherent paragraphs that appear benign on
+          the surface. We refer to each such paragraph as a
+          <strong>carrier paragraph</strong> because it carries hidden information
+          without revealing it in the visible text.
         </p>
 
         <figure>
           <img src="assets/stegoattack.png" alt="Overview diagram of StegoAttack" />
           <figcaption>
-            Figure 2. Overview of StegoAttack: masked regeneration, hidden
-            in-context examples, and prompt template construction.
+            Figure 2. Overview of StegoAttack. Part A embeds a query in a
+            seemingly benign carrier paragraph through masked regeneration; Part B constructs
+            steganographic in-context examples; and Part C provides a structured
+            prompt template for executing the complete task.
           </figcaption>
         </figure>
+        <p>
+          The final attack prompt combines three complementary components:
+        </p>
+        <div class="prompt-formula" aria-label="Prompt assembly formula">
+          <span class="formula-symbol"><i>P</i><sup>(t)</sup> =</span>
+          <span class="formula-term">
+            <strong><i>C</i></strong>
+            <small>Part C: Prompt template</small>
+          </span>
+          <span class="formula-operator" aria-hidden="true">&Vert;</span>
+          <span class="formula-term">
+            <strong><i>B</i><sup>(t)</sup></strong>
+            <small>Part B: Selected ICL examples</small>
+          </span>
+          <span class="formula-operator" aria-hidden="true">&Vert;</span>
+          <span class="formula-term">
+            <strong><i>H</i>(<i>q</i>)</strong>
+            <small>Part A: Hidden query</small>
+          </span>
+        </div>
+        <p class="formula-caption">
+          Here, <i>H</i>(<i>q</i>) is the seemingly benign carrier paragraph
+          generated from query <i>q</i>, <i>B</i><sup>(t)</sup> is the subset of
+          steganographic examples selected at iteration <i>t</i>, and <i>C</i> is the static instruction
+          template. The symbol &Vert; denotes string concatenation.
+        </p>
+
+        <div class="method-part">
+          <h3><span class="part-label">Part A</span> Steganographic Encryption</h3>
+          <p>
+            The query is decomposed into a sequence of words, with each word
+            assigned to a predefined position in one sentence of the seemingly
+            benign carrier paragraph. Distributing the query across multiple
+            sentences conceals its original form while preserving a
+            natural-language surface.
+          </p>
+          <p>
+            <strong>Masked regeneration.</strong> The remaining token positions
+            are initially filled with random mask words. An auxiliary LLM then
+            regenerates this constrained sequence into a fluent, semantically
+            coherent paragraph while keeping every query word fixed at its
+            assigned position. This formulation improves embedding accuracy and
+            reduces direct exposure of the hidden query.
+          </p>
+        </div>
+
+        <div class="method-part">
+          <h3><span class="part-label">Part B</span> Steganographic ICL Strategy</h3>
+          <p>
+            StegoAttack constructs a fixed bank of steganographically hidden
+            question-answer pairs and selects a subset at each iteration. The
+            visible examples remain benign and linguistically coherent, while
+            their hidden content demonstrates the latent response pattern needed
+            for the task.
+          </p>
+        </div>
+
+        <div class="method-part">
+          <h3><span class="part-label">Part C</span> Prompt Template Construction</h3>
+          <p>
+            A static instruction template coordinates the target model through
+            three sequential operations:
+          </p>
+          <ol class="method-operations">
+            <li>
+              <strong>Steganographic decryption.</strong> Extract the concealed
+              query from its predefined token positions.
+            </li>
+            <li>
+              <strong>Response generation.</strong> Answer the extracted query by
+              following the response patterns demonstrated in the ICL examples.
+            </li>
+            <li>
+              <strong>Answer encryption.</strong> Embed the generated answer in a
+              new carrier paragraph that appears benign on the surface.
+            </li>
+          </ol>
+        </div>
       </section>
 
       <section id="experiments">
         <h2>Experiments</h2>
-        <p>
-          The main evaluation compares StegoAttack with eight jailbreak methods
-          on four safety-aligned target models: Gemini-3, GPT-5, DeepSeek-V3.2,
-          and Qwen3-max. The reported metrics include ASR, harmfulness score,
-          and relatedness score.
+        <p class="section-lead">
+          We evaluate <strong class="text-emphasis">StegoAttack</strong> against
+          fourteen leading jailbreak baselines on four state-of-the-art,
+          safety-aligned language models. The evaluation measures both attack
+          effectiveness and the quality and stealth of the resulting responses.
         </p>
-        <ul>
-          <li>
-            <strong>StegoAttack achieves the highest average ASR</strong> in the main comparison.
-          </li>
-          <li>
-            The paper reports <strong>100.00% ASR on Gemini-3</strong> and
-            <strong>82.67% ASR on GPT-5</strong>.
-          </li>
-          <li>
-            <strong>Steganographic ICL</strong> improves GPT-5 ASR by
-            <strong>40.67 percentage points</strong> and harmfulness score by
-            <strong>1.50</strong> in the ablation study.
-          </li>
-          <li>
-            Under external guards, StegoAttack maintains robustness with only a
-            <strong>26.33% ASR reduction</strong> in the reported stealth evaluation.
-          </li>
-        </ul>
+
+        <div class="experiment-setup">
+          <p>
+            <strong>Target models.</strong> GPT-5, Gemini-3, DeepSeek-V3.2, and
+            Qwen3-max. Thinking mode is enabled for the latter three models.
+          </p>
+          <p>
+            <strong>Datasets.</strong> AdvBench-50 contains 50 representative
+            malicious queries, while Malicious Instruct contains 100 harmful
+            instruction-based prompts covering diverse scenarios.
+          </p>
+          <p>
+            <strong>Metrics.</strong> Attack Success Rate (ASR), Harmfulness
+            Score, and Relatedness Score. An attack is counted as successful only
+            when the generated response is both harmful and relevant to the
+            original query.
+          </p>
+        </div>
+
+        <h3>Main comparison</h3>
+        <figure>
+          <img src="assets/table2.png" alt="Performance comparison across jailbreak methods" />
+          <figcaption>
+            Table 2. Performance comparison between StegoAttack and fourteen
+            jailbreak baselines on four target models. Avg. ASR is the
+            arithmetic mean across the four models. For StegoAttack, scores are
+            computed from decrypted outputs because the method encrypts the
+            response at the output level.
+          </figcaption>
+        </figure>
+        <p>
+          StegoAttack achieves the highest ASR across all four target models,
+          reaching <strong>100.00% on Gemini-3</strong>,
+          <strong>82.67% on GPT-5</strong>, <strong>100.00% on DeepSeek-V3.2</strong>,
+          and <strong>99.33% on Qwen3-max</strong>. Its average ASR is
+          <strong class="text-emphasis">95.50%</strong>, substantially exceeding
+          the strongest baseline results.
+        </p>
+        <p>
+          The method also produces high-quality harmful responses, as reflected
+          by its Harmfulness and Relatedness Scores. The lower Relatedness Score
+          on GPT-5 reflects the model's stronger safety alignment, which often
+          restricts its responses to tangential information even when the attack
+          succeeds.
+        </p>
+
+        <h3>Stealth evaluation</h3>
+        <p>
+          We assess linguistic stealth using perplexity (PPL) and grammar error
+          count (GE), where lower values indicate more natural text. On Gemini-3,
+          StegoAttack achieves a PPL of <strong>49.85</strong> and a GE score of
+          <strong>0.80</strong>. We assess semantic stealth by measuring the
+          reduction in ASR after applying six external safety detectors. The ASR
+          reduction ranges from <strong>0.76%</strong> to
+          <strong>26.33%</strong>; smaller reductions indicate stronger resistance
+          to detector intervention. Together, these results show that
+          StegoAttack conceals malicious intent while preserving linguistic
+          naturalness.
+        </p>
+
+        <h3>Ablation studies</h3>
+        <p>
+          We study the contributions of masked regeneration and steganographic
+          in-context learning, the two core components that distinguish
+          StegoAttack from direct instruction-based attacks.
+        </p>
+        <div class="ablation-block">
+          <p>
+            <strong>Masked regeneration.</strong> Across six embedding
+            positions, masked regeneration achieves an accuracy above
+            <strong>91.19%</strong>, with a peak of <strong>99.31%</strong>, and
+            improves mean accuracy by <strong>50.24 percentage points</strong>
+            over direct instruction. It also reduces the refusal rate to nearly
+            zero, showing that constrained regeneration provides more reliable
+            placement of hidden words.
+          </p>
+          <p>
+            <strong>Steganographic ICL.</strong> Hidden in-context examples are
+            particularly important for robustly aligned models. On GPT-5, they
+            increase ASR by <strong>40.67 percentage points</strong> and the
+            Harmfulness Score by <strong>1.50</strong>, demonstrating that
+            concealed behavioral patterns can substantially strengthen the
+            attack.
+          </p>
+        </div>
+
       </section>
 
       <section id="resources">
@@ -180,16 +337,6 @@
         </ul>
       </section>
 
-      <section id="ethics">
-        <h2>Ethics and Limitations</h2>
-        <p>
-          The paper frames StegoAttack as a security evaluation study intended
-          to motivate stronger safeguards and more rigorous detector research.
-          It also notes that future model capabilities may make more covert
-          steganographic channels possible, including techniques that hide
-          information across multiple words or sub-word fragments.
-        </p>
-      </section>
 
       <section id="bibtex">
         <h2>BibTeX</h2>
@@ -209,8 +356,6 @@
       <p>
         This website is licensed under a
         <a href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>.
-      </p>
-      <p>
         This means you are free to borrow the
         <a href="https://github.com/nerfies/nerfies.github.io">source code</a>
         of this website, we just ask that you link back to this page in the

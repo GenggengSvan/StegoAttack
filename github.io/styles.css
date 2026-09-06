@@ -138,6 +138,10 @@ strong {
   color: #4F46E5;
 }
 
+.question-emphasis {
+  color: #4F46E5;
+}
+
 .warning {
   max-width: 760px;
   margin: 22px auto 0;
@@ -167,11 +171,105 @@ p {
   margin: 0 0 15px;
 }
 
+.section-lead {
+  font-size: 1.05rem;
+}
+
+.experiment-setup {
+  margin: 22px 0 30px;
+  padding: 16px 18px;
+  border-left: 4px solid #4F46E5;
+  background: #f7f7ff;
+}
+
+.experiment-setup p {
+  margin-bottom: 8px;
+}
+
+.experiment-setup p:last-child {
+  margin-bottom: 0;
+}
+
+.ablation-block {
+  margin-top: 12px;
+}
+
 .research-question {
   margin: 22px 0;
   padding: 16px 18px;
   border-left: 4px solid #4F46E5;
   background: #f7f7ff;
+}
+
+.prompt-formula {
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  gap: 12px;
+  margin: 20px 0 10px;
+  padding: 18px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--soft);
+}
+
+.formula-symbol,
+.formula-operator {
+  display: flex;
+  align-items: center;
+  font-family: "Castoro", Georgia, serif;
+  font-size: 1.18rem;
+}
+
+.formula-term {
+  min-width: 170px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 9px 12px;
+  border-radius: 5px;
+  background: #fff;
+  text-align: center;
+}
+
+.formula-term strong {
+  color: #4F46E5;
+  font-family: "Castoro", Georgia, serif;
+  font-size: 1.18rem;
+}
+
+.formula-term small {
+  color: var(--muted);
+  font-size: 0.78rem;
+}
+
+.formula-caption {
+  color: var(--muted);
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+.method-part {
+  margin-top: 28px;
+}
+
+.method-part h3 {
+  margin-bottom: 8px;
+}
+
+.part-label {
+  margin-right: 7px;
+  color: #4F46E5;
+}
+
+.method-operations {
+  margin: 8px 0 0;
+  padding-left: 24px;
+}
+
+.method-operations li {
+  margin-bottom: 8px;
+  padding-left: 4px;
 }
 
 figure {
@@ -186,6 +284,14 @@ figure img {
   height: auto;
   margin: 0 auto;
   border: 1px solid var(--border);
+}
+
+.table-figure {
+  max-width: 700px;
+}
+
+.table-figure img {
+  max-width: 760px;
 }
 
 figcaption {
@@ -260,5 +366,18 @@ footer p {
 
   h1 {
     font-size: 32px;
+  }
+
+  .prompt-formula {
+    flex-direction: column;
+  }
+
+  .formula-symbol,
+  .formula-operator {
+    justify-content: center;
+  }
+
+  .formula-term {
+    min-width: 0;
   }
 }
