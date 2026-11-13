@@ -58,6 +58,8 @@ class ResponseAnalyzer:
             idx = position
         elif isinstance(position, str) and (position.isdigit() or (position.startswith("-") and position[1:].isdigit())):
             idx = int(position)
+        elif isinstance(position, str) and position.lower() == "penultimate":
+            idx = -2
 
         for sentence in sentences:
             words = self.extract_words(sentence)
@@ -127,7 +129,8 @@ def analyze_json_file(json_path: str, position: str = "first", modify_original: 
 
         if is_refusal:
             refusal_count += 1
-        total_similarity += similarity
+        else:
+            total_similarity += similarity
 
         if modify_original:
             item["is_refusal_response"] = is_refusal
@@ -147,8 +150,9 @@ def analyze_json_file(json_path: str, position: str = "first", modify_original: 
         })
 
     total_samples = len(detailed_results)
+    non_refusal_count = total_samples - refusal_count
     refusal_rate = refusal_count / total_samples if total_samples else 0
-    avg_similarity = total_similarity / total_samples if total_samples else 0
+    avg_similarity = total_similarity / non_refusal_count if non_refusal_count else 0
 
     if modify_original:
         with open(json_path, "w", encoding="utf-8") as handle:
@@ -159,6 +163,7 @@ def analyze_json_file(json_path: str, position: str = "first", modify_original: 
         "total_samples": total_samples,
         "position": position,
         "refusal_count": refusal_count,
+        "non_refusal_count": non_refusal_count,
         "refusal_rate": round(refusal_rate, 4),
         "refusal_rate_percentage": f"{round(refusal_rate * 100, 2)}%",
         "avg_similarity_score": round(avg_similarity, 4),

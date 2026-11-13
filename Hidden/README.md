@@ -96,6 +96,17 @@ print(record["answer_hidden_response"])
 - `analysis.py`: response/refusal and word-alignment helpers.
 - `config.json`: default model and runtime settings.
 
+## ACC and RR Evaluation
+
+`analyze_json_file` computes each response's ACC score as the Jaccard similarity
+between the set of query words and the set of words extracted at the selected
+position from each sentence. The reported average includes only non-refusal
+responses. RR counts keyword-identified refusals among all samples. The
+`penultimate` position is equivalent to numeric index `-2`.
+
+Because ACC compares sets, it does not measure word order or repeated-word
+counts.
+
 ## 🔭 Future Work
 
 - `zero_width`: hide bits with zero-width Unicode characters such as ZWSP/ZWNJ.
